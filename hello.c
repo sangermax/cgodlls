@@ -1,6 +1,8 @@
 #include "hello.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 
 // helloworl
 void helloworld()
@@ -17,7 +19,7 @@ void store_jpg(char* name ,int len)
     fclose(fp); 
 }
 
-// 调用结构体指针
+//only_struct  调用结构体指针
 void only_struct(struct userinfo* u)
 {
     char* name =u->username;
@@ -25,7 +27,7 @@ void only_struct(struct userinfo* u)
     printf("call_only_struct :%s %d\n",name,len);
 }
 
-// 调用结构体指针，模拟结构体数组
+//multi_struct 调用结构体指针，模拟结构体数组
 void multi_struct(struct userinfo* u,int size)
 {
     int i = 0;
@@ -39,3 +41,17 @@ void multi_struct(struct userinfo* u,int size)
     }    
 }
 
+
+void callBack(fnc notifyMain)
+{
+	int r= notifyMain(4);
+    sleep(1);
+    printf("callback C语言中回调 int %d\n",r);
+}
+void callBack2(fnc2 notifyMain)
+{
+	char* msg="msg from c";
+	int r= notifyMain(msg);
+	printf("callback2 C语言回调char * %d %s\n",r,msg);
+
+}

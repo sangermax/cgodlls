@@ -13,14 +13,12 @@ void some_c_func(callback_fcn callback) {
     printf("c.some_c_func() %d", response);
 }
 
-void testcallback(){
-    printf("recv data from godll \n");
-}
 
 
 // 调用 libhello.so  测试动态库
 int main()
 {
+    // c调用c动态库的demo
     helloworld();
     struct userinfo u = {"testproc",sizeof("testproc")};
     only_struct(&u);
@@ -28,6 +26,7 @@ int main()
     // c 调用go的函数实现
     DCall();
     // c 调用go的回调函数
+    callOnMeGo_cgo(1);
     some_c_func(callOnMeGo_cgo);
     return 0;
 }

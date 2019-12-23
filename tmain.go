@@ -3,10 +3,12 @@ package main
 
 /*
 #cgo CFLAGS : -I.
-#cgo LDFLAGS: -L. -lhello
+#cgo LDFLAGS: -L. -lhello 
 #include "hello.h"
 #include <stdio.h>
 #include <stdlib.h>
+int addNum_cgo(int in); // Forward declaration.
+int showMsg_cgo(char* s);
 */
 import "C"
 import (
@@ -15,12 +17,14 @@ import (
 	"unsafe"
 )
 
+//export addNum
 func addNum(in int) int {
 	return in + 1
 }
 
+//export showMsg
 func showMsg(msg *C.char) int {
-	fmt.Println("sow msg in go", C.GoString(msg))
+	fmt.Println("show msg in go", C.GoString(msg))
 	return 1
 }
 
@@ -29,6 +33,12 @@ func main() {
 	call_store_file()
 	call_only_struct()
 	call_multi_struct()
+
+	C.callBack((C.fnc)(unsafe.Pointer(C.addNum_cgo)))
+	C.callBack2((C.fnc2)(unsafe.Pointer(C.showMsg_cgo)))
+
+	b := make([]byte, 1)
+	os.Stdin.Read(b)
 }
 
 func call_helloworl() {
