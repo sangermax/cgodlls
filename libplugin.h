@@ -78,10 +78,6 @@ extern "C" {
 
 extern GoInt callOnMeGo(GoInt p0);
 
-extern void DCallinit(void* p0);
-
-extern void Dcallinit2(void* p0);
-
 extern void DCall();
 
 extern void DCallWithParam(GoString p0, GoString p1);

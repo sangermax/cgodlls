@@ -16,6 +16,10 @@ import (
 //export callOnMeGo
 func callOnMeGo(in int) int {
 	fmt.Println("调用Go的回调函数.. 实现DLL动态库函数的入口功能")
+	for i:= 0 ; i < 10; i ++ {
+		fmt.Println("x - ", i)
+		time.Sleep(time.Second)
+	}
 	return in + 1
 }
 
