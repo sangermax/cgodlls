@@ -21,6 +21,7 @@ static void wait_event() {
 	while(1) {
 		memset((void *)buffer, 0 , sizeof(buffer));
 		i ++;
+		// 读天线，流程结束后返回c调用，代码不在此处过多写
 		c = myprintf_cgo(i);
 		sprintf(buffer,"test data in %d - %d", c, i);
 		_cb(buffer);
@@ -37,6 +38,11 @@ import (
 )
 
 type Replaydata struct {
+	Error int `json:"error"`
+	Errdes string `json:"errdes"`
+	Obuid string `json:"obuid"`
+	Cardid string `json:"cardid"`
+	Plate string `json:"plate"`
 }
 
 var (
@@ -45,8 +51,11 @@ var (
 
 // 天线初始化
 //export initrsu
-func initrsu(rsuip string, power int, channel int, waittime int) {
-	rsu.Init(rsuip, power, channel, waittime)
+func initrsu(rsuip *C.char, power int, channel int, waittime int) {
+
+	rsuipstr := C.GoString(rsuip)
+	rsu.Init(rsuipstr, power, channel, waittime)
+	//defer C.free(unsafe.Pointer(rsuipstr))
 }
 
 //export myprintf

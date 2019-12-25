@@ -100,7 +100,7 @@ extern "C" {
 
 // 天线初始化
 
-extern void initrsu(GoString p0, GoInt p1, GoInt p2, GoInt p3);
+extern void initrsu(char* p0, GoInt p1, GoInt p2, GoInt p3);
 
 extern int myprintf(int p0);
 

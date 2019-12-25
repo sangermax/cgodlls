@@ -17,7 +17,7 @@ int main()
     register_callback(gocallfuncstr);
 
     // 初始化
-    //initrsu("192.168.0.123",15,1,1);
+    initrsu("192.168.0.123",15,1,1);
 
     // 开始接收数据
     wait_event();
