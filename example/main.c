@@ -4,14 +4,14 @@
 #include "libplugin.h"
 
 
-void gocallfuncstr(void *s){
-    printf("收到天线返回数据: %s\n", (char *)s);
+void gocallfuncstr(void *s, int len){
+    printf("收到天线返回 长度:%d : %s\n", len, (char *)s);
 
     //.. 此处做逻辑判断
 
     Writefee(100,200);
 
-    
+
 }
 
 // 调用 libhello.so  测试动态库

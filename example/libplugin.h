@@ -26,26 +26,23 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-typedef void (*callback)(void *);
+typedef void (*callback)(void *,int);
 int dealrsu_cgo(char *buffer);
 static callback _cb;
 static void register_callback(callback cb) {
     _cb = cb;
 }
 static void wait_event() {
-	int i = 0;
-	int c = 0;
-
+	int ilen = 0;
 	// 天线内容缓冲区
 	char buffer[4048];
 
 	// 不断的接收数据，回调给c客户端
 	while(1) {
 		memset((void *)buffer, 0 , sizeof(buffer));
-		i ++;
 		// 读天线，流程结束后返回c调用，代码不在此处过多写
-		c = dealrsu_cgo(buffer);
-		_cb(buffer);
+		ilen = dealrsu_cgo(buffer);
+		_cb(buffer ,ilen);
 	}
 }
 
@@ -104,7 +101,7 @@ extern "C" {
 
 extern void initrsu(char* p0, GoInt p1, GoInt p2, GoInt p3);
 
-extern int dealrsu(char* p0);
+extern GoInt dealrsu(char* p0);
 
 extern void Writefee(GoInt p0, GoInt p1);
 

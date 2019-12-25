@@ -6,26 +6,23 @@ package main
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-typedef void (*callback)(void *);
+typedef void (*callback)(void *,int);
 int dealrsu_cgo(char *buffer);
 static callback _cb;
 static void register_callback(callback cb) {
     _cb = cb;
 }
 static void wait_event() {
-	int i = 0;
-	int c = 0;
-
+	int ilen = 0;
 	// 天线内容缓冲区
 	char buffer[4048];
 
 	// 不断的接收数据，回调给c客户端
 	while(1) {
 		memset((void *)buffer, 0 , sizeof(buffer));
-		i ++;
 		// 读天线，流程结束后返回c调用，代码不在此处过多写
-		c = dealrsu_cgo(buffer);
-		_cb(buffer);
+		ilen = dealrsu_cgo(buffer);
+		_cb(buffer ,ilen);
 	}
 }
 */
@@ -61,17 +58,17 @@ func initrsu(rsuip *C.char, power int, channel int, waittime int) {
 }
 
 //export dealrsu
-func dealrsu(buffer* C.char) C.int {
+func dealrsu(buffer* C.char) int {
 
 	var replaydata Replaydata
 	replaydata.Plate = "苏A12345"
 	replaydata.Obuid = "123456"
-	replaydata.Cardid = "测试卡320100000000011223"
+	replaydata.Cardid = "测试卡320100000000011223456789"
 
 	jsonarr,_ := json.Marshal(replaydata)
 	strjson := string(jsonarr)
 
-	// 此处只做个模拟，实际实现go语言读取天线的逻辑
+	// 此处只做个模拟，实际实现go语言读取天线的逻辑,拷贝结果数据到函数里面
 
 
 	var cmsg *C.char = C.CString(strjson)
@@ -79,8 +76,10 @@ func dealrsu(buffer* C.char) C.int {
 	C.memcpy(unsafe.Pointer(buffer), unsafe.Pointer(cmsg),C.size_t(lenstr))
 	defer C.free(unsafe.Pointer(cmsg))
 
+	
+
 	time.Sleep(time.Second)
-	return 100
+	return lenstr
 }
 
 //export Writefee
