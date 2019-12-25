@@ -4,11 +4,7 @@
 #include <unistd.h>
 
 
-// helloworl
-void helloworld()
-{
-    printf("hello world.\n");
-}
+
 
 // 指针和int 模拟存文件
 void store_jpg(char* name ,int len)

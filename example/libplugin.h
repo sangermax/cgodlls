@@ -19,21 +19,23 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
-#line 4 "plugin.go"
+#line 3 "plugin.go"
 
 
-#include "clib.h"
-int callOnMeGo_cgo(int in); // Forward declaration.
-typedef void (*callback)(void *);
-
+#include "def.h"
 static callback _cb;
 static void register_callback(callback cb) {
     _cb = cb;
 }
 static void wait_event() {
-    _cb("test data in go");
+	int i = 0;
+	int c = 0;
+	while(1) {
+		i ++;
+		myprintf(i);
+		_cb("test data in go");
+	}
 }
-
 
 #line 1 "cgo-generated-wrapper"
 
@@ -86,11 +88,7 @@ extern "C" {
 #endif
 
 
-extern void DCall();
-
-extern GoInt callOnMeGo(GoInt p0);
-
-extern void DCallWithParam(GoString p0, GoString p1);
+extern int myprintf(int p0);
 
 #ifdef __cplusplus
 }

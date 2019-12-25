@@ -24,12 +24,12 @@ func addNum(in int) int {
 
 //export showMsg
 func showMsg(msg *C.char) int {
-	fmt.Println("show msg in go", C.GoString(msg))
+	fmt.Println("Go执行代码 ", C.GoString(msg))
 	return 1
 }
 
 func main() {
-	call_helloworl()
+
 	call_store_file()
 	call_only_struct()
 	call_multi_struct()
@@ -41,9 +41,6 @@ func main() {
 	os.Stdin.Read(b)
 }
 
-func call_helloworl() {
-	C.helloworld()
-}
 
 func call_store_file() {
 	f, err := os.Open("1.jpg")
