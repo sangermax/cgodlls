@@ -1,7 +1,7 @@
 package main
 
 /*
-#include "def.h"
+#include <stdio.h>
 int myprintf_cgo(int i)
 {
 	int myprintf(int);

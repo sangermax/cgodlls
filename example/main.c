@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include "libplugin.h"
 
-typedef void (*Callback)(int d);
-
 
 void gocallfuncstr(void *s){
-    printf("go回调返回 %s\n", (char *)s);
+    printf("收到天线返回,返回数据: %s\n", (char *)s);
+
+    Writefee(100,200);
 }
 
 // 调用 libhello.so  测试动态库
@@ -15,6 +15,10 @@ int main()
 {
     // 注册回调
     register_callback(gocallfuncstr);
+
+    // 初始化
+    //initrsu("192.168.0.123",15,1,1);
+
     // 开始接收数据
     wait_event();
 

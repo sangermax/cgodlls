@@ -22,7 +22,11 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 #line 3 "plugin.go"
 
 
-#include "def.h"
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+typedef void (*callback)(void *);
+int myprintf_cgo(int i);
 static callback _cb;
 static void register_callback(callback cb) {
     _cb = cb;
@@ -30,10 +34,16 @@ static void register_callback(callback cb) {
 static void wait_event() {
 	int i = 0;
 	int c = 0;
+	char buffer[1024];
+
+	// 初始化天线
+
 	while(1) {
+		memset((void *)buffer, 0 , sizeof(buffer));
 		i ++;
-		myprintf(i);
-		_cb("test data in go");
+		c = myprintf_cgo(i);
+		sprintf(buffer,"test data in %d - %d", c, i);
+		_cb(buffer);
 	}
 }
 
@@ -88,7 +98,13 @@ extern "C" {
 #endif
 
 
+// 天线初始化
+
+extern void initrsu(GoString p0, GoInt p1, GoInt p2, GoInt p3);
+
 extern int myprintf(int p0);
+
+extern void Writefee(GoInt p0, GoInt p1);
 
 #ifdef __cplusplus
 }
