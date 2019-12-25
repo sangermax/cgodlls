@@ -36,7 +36,9 @@ import (
 	//"github.com/mattn/go-pointer"
 )
 
+// 回传给上位机的动态库
 type Replaydata struct {
+	Msgtype int `json:"msgtype"`
 	Error int `json:"error"`
 	Errdes string `json:"errdes"`
 	Obuid string `json:"obuid"`
@@ -61,6 +63,7 @@ func initrsu(rsuip *C.char, power int, channel int, waittime int) {
 func dealrsu(buffer* C.char) int {
 
 	var replaydata Replaydata
+	replaydata.Msgtype = 1
 	replaydata.Plate = "苏A12345"
 	replaydata.Obuid = "123456"
 	replaydata.Cardid = "测试卡320100000000011223456789"
