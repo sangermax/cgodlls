@@ -5,9 +5,13 @@
 
 
 void gocallfuncstr(void *s){
-    printf("收到天线返回,返回数据: %s\n", (char *)s);
+    printf("收到天线返回数据: %s\n", (char *)s);
+
+    //.. 此处做逻辑判断
 
     Writefee(100,200);
+
+    
 }
 
 // 调用 libhello.so  测试动态库

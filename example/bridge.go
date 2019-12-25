@@ -2,10 +2,10 @@ package main
 
 /*
 #include <stdio.h>
-int myprintf_cgo(int i)
+int dealrsu_cgo(char * buffer)
 {
-	int myprintf(int);
-	return myprintf(i);
+	int dealrsu(char *);
+	return dealrsu(buffer);
 }
 */
 import "C"

@@ -5,8 +5,9 @@ package main
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 typedef void (*callback)(void *);
-int myprintf_cgo(int i);
+int dealrsu_cgo(char *buffer);
 static callback _cb;
 static void register_callback(callback cb) {
     _cb = cb;
@@ -14,16 +15,16 @@ static void register_callback(callback cb) {
 static void wait_event() {
 	int i = 0;
 	int c = 0;
-	char buffer[1024];
 
-	// 初始化天线
+	// 天线内容缓冲区
+	char buffer[4048];
 
+	// 不断的接收数据，回调给c客户端
 	while(1) {
 		memset((void *)buffer, 0 , sizeof(buffer));
 		i ++;
 		// 读天线，流程结束后返回c调用，代码不在此处过多写
-		c = myprintf_cgo(i);
-		sprintf(buffer,"test data in %d - %d", c, i);
+		c = dealrsu_cgo(buffer);
 		_cb(buffer);
 	}
 }
@@ -32,8 +33,9 @@ import "C"
 import (
 	"fmt"
 	"time"
+	"encoding/json"
 	dev "cgodlls/example/device"
-	//"unsafe"
+	"unsafe"
 	//"github.com/mattn/go-pointer"
 )
 
@@ -43,6 +45,7 @@ type Replaydata struct {
 	Obuid string `json:"obuid"`
 	Cardid string `json:"cardid"`
 	Plate string `json:"plate"`
+
 }
 
 var (
@@ -55,19 +58,29 @@ func initrsu(rsuip *C.char, power int, channel int, waittime int) {
 
 	rsuipstr := C.GoString(rsuip)
 	rsu.Init(rsuipstr, power, channel, waittime)
-	//defer C.free(unsafe.Pointer(rsuipstr))
 }
 
-//export myprintf
-func myprintf(i C.int) C.int {
-	time.Sleep(time.Second)
-	idata := int(i)
-	s := fmt.Sprintf("Go dll %d", idata)
-	fmt.Println(s)
+//export dealrsu
+func dealrsu(buffer* C.char) C.int {
 
-	//s := fmt.Sprintf("Go dll string %d", i)
-	//return C.CString("testdata")
-	return i * 100
+	var replaydata Replaydata
+	replaydata.Plate = "苏A12345"
+	replaydata.Obuid = "123456"
+	replaydata.Cardid = "测试卡320100000000011223"
+
+	jsonarr,_ := json.Marshal(replaydata)
+	strjson := string(jsonarr)
+
+	// 此处只做个模拟，实际实现go语言读取天线的逻辑
+
+
+	var cmsg *C.char = C.CString(strjson)
+	lenstr := len(strjson)
+	C.memcpy(unsafe.Pointer(buffer), unsafe.Pointer(cmsg),C.size_t(lenstr))
+	defer C.free(unsafe.Pointer(cmsg))
+
+	time.Sleep(time.Second)
+	return 100
 }
 
 //export Writefee
