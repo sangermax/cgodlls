@@ -3,4 +3,4 @@
 main 
 *.so
 plugload
-
+.DS_Store
